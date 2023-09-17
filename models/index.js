@@ -1,14 +1,16 @@
 
 
-const Usuario = require('./usuario');
+const User = require('./user');
 const Role = require('./role');
-const Cliente = require('./cliente');
+const Client = require('./client');
+const Order = require('./order');
 
 
 
 module.exports = {
-    Usuario,
+    User,
     Role,
-    Cliente
+    Client,
+    Order
 }
 

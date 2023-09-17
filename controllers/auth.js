@@ -1,7 +1,7 @@
 const { response } = require('express');
 const bcryptjs = require('bcryptjs')
 
-const Usuario = require('../models/usuario');
+const User = require('../models/user');
 
 const { generarJWT } = require('../helpers/generar-jwt');
 
@@ -13,33 +13,33 @@ const login = async(req, res = response) => {
     try {
       
         // Verificar si el email existe
-        const usuario = await Usuario.findOne({ correo });
-        if ( !usuario ) {
+        const user = await User.findOne({ correo });
+        if ( !user ) {
             return res.status(400).json({
-                msg: 'Usuario / Password no son correctos - correo'
+                msg: 'User / Password no son correctos - correo'
             });
         }
 
-        // SI el usuario está activo
-        if ( !usuario.estado ) {
+        // SI el user está activo
+        if ( !user.estado ) {
             return res.status(400).json({
-                msg: 'Usuario / Password no son correctos - estado: false'
+                msg: 'User / Password no son correctos - estado: false'
             });
         }
 
         // Verificar la contraseña
-        const validPassword = bcryptjs.compareSync( password, usuario.password );
+        const validPassword = bcryptjs.compareSync( password, user.password );
         if ( !validPassword ) {
             return res.status(400).json({
-                msg: 'Usuario / Password no son correctos - password'
+                msg: 'User / Password no son correctos - password'
             });
         }
 
         // Generar el JWT
-        const token = await generarJWT( usuario.id );
+        const token = await generarJWT( user.id );
 
         res.json({
-            usuario,
+            user,
             token
         })
 
@@ -56,10 +56,10 @@ const login = async(req, res = response) => {
 const validarTokenUsuario = async (req, res = response ) => {
 
     // Generar el JWT
-    const token = await generarJWT( req.usuario._id );
+    const token = await generarJWT( req.user._id );
     
     res.json({
-        usuario: req.usuario,
+        user: req.user,
         token: token,
     })
 
