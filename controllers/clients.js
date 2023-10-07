@@ -2,26 +2,26 @@ const { response, request } = require('express');
 
 const Client = require('../models/client');
 
-const getClientPorId = async(req = request, res = response) => {
+const getClientPorId = async (req = request, res = response) => {
 
     const { id } = req.params;
 
-    const client = await Client.findById( id );
+    const client = await Client.findById(id);
 
     res.json(client);
 }
 
 
-const clientesGet = async(req = request, res = response) => {
+const clientesGet = async (req = request, res = response) => {
 
     const { limite = 0, desde = 0 } = req.query;
     const query = { estado: true };
 
-    const [ total, clients ] = await Promise.all([
+    const [total, clients] = await Promise.all([
         Client.countDocuments(query),
         Client.find(query)
-            .skip( Number( desde ) )
-            .limit(Number( limite ))
+            .skip(Number(desde))
+            .limit(Number(limite))
     ]);
 
     res.json({
@@ -30,50 +30,56 @@ const clientesGet = async(req = request, res = response) => {
     });
 }
 
-const clientesPost = async(req, res = response) => {   
+const clientesPost = async (req, res = response) => {
     const client = new Client(req.body);
-    // Encriptar la contraseña
-    // Guardar en BD
-    await client.save();
-    // Generar el JWT=
-    res.json({
-        client,
-    });
-}
-
-const bulkClientesPost = async(req, res = response) => {   
-    const body = req.body["clientes"];
-
+    client.operations = [];
     try {
-        
-        var jsonObj = JSON.parse(body);
+        await client.save();
+        return res.json({
+            client,
+        });
     } catch (error) {
-        return res.status(400).json({
-            msg: 'formato incorrecto'
-        })
+        console.log(error)
     }
-    
 
-    Client.create(jsonObj, function (err) {
-        if (!err) {
-            res.status(200).json({
-                msg: 'Carga de clientes satisfactoria'
-            });
-        } else { 
-            console.log(err);
-            res.status(400).json({
-                msg: 'Algo salio mal.',
-            });
-         }
-    });
+
+
+
+    // Generar el JWT=
+
 }
 
-const clientesPut = async(req, res = response) => {
+const bulkClientesPost = async (req, res = response) => {
+    const body = req.body["clientes"];
+    try {
+        const ok = await JSON.parse(body).forEach(async element => {
+            const client = new Client(element);
+            const isExist = await Client.findOne({ ibanWallet: client.ibanWallet });
+            if (isExist) {
+
+            } else {
+                await client.save();
+            }
+        });
+
+        res.json({
+            msg: `Se agregaron los clientes`,
+
+        });
+
+    } catch (error) {
+        // console.log(error)
+    }
+
+
+}
+
+const clientesPut = async (req, res = response) => {
 
     const { id } = req.params;
     const clientePut = req.body;
 
-    const client = await Client.findByIdAndUpdate( id, clientePut, { new: true } );
+    const client = await Client.findByIdAndUpdate(id, clientePut, { new: true });
 
     res.json(client);
 }
@@ -84,12 +90,13 @@ const clientesPatch = (req, res = response) => {
     });
 }
 
-const clientesDelete = async(req, res = response) => {
+const clientesDelete = async (req, res = response) => {
 
     const { id } = req.params;
-    const client = await Client.findByIdAndUpdate( id, { estado: false } );
-
     
+    const client = await Client.findByIdAndUpdate(id, { estado: false }, {new: true});
+
+   
     res.json(client);
 }
 

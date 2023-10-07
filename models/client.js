@@ -2,26 +2,28 @@
 const { Schema, model } = require('mongoose');
 
 const ClientSchema = Schema({
-    
-    clientId: {
-        type: String,
-        default: 'N/A'
-    },
+
     businessName: {
         type: String,
-        default: 'N/A'
+        default: ''
     },
     firstName: {
         type: String,
-        default: 'N/A'
+        default: ''
     },
     lastName: {
         type: String,
-        default: 'N/A'
+        default: ''
     },
     ibanWallet: {
         type: [String],
-        default: []
+        require: true
+    },
+    operations: {
+        type: [Schema.Types.ObjectId],
+        ref: 'Operation',
+        default: [],
+        autopopulate: true
     },
     tier: {
         type: String,
@@ -40,85 +42,43 @@ const ClientSchema = Schema({
     },
     registryDate: {
         type: String,
-        default: 'N/A',
+        default: '',
     },
     countryResidency: {
         type: String,
-        default: 'N/A',
+        default: '',
     },
     nationality: {
         type: String,
-        default: 'N/A',
+        default: '',
     },
     birth: {
         type: String,
-        default: 'N/A',
+        default: '',
     },
     documentNumber: {
         type: String,
-        default: 'N/A',
+        default: '',
     },
     expirationDate: {
         type: String,
-        default: 'N/A',
-    },
-    tierRisk: {
-        type: String,
-        default: '5',
-        enum: ['1', '2', '3', '4', '5']
+        default: '',
     },
     residenceLand: {
         type: String,
-        default: 'N/A',
+        default: '',
     },
     nationalityLand: {
         type: String,
-        default: 'N/A',
-    },
-    ibanLand: {
-        type: String,
-        default: 'N/A',
-    },
-    residenceRisk: {
-        type: String,
-        default: '5',
-        enum: ['1', '2', '3', '4', '5']
-    },
-    nationalityRisk: {
-        type: String,
-        default: '5',
-        enum: ['1', '2', '3', '4', '5']
-    },
-    ibanGeoRisk: {
-        type: String,
-        default: '5',
-        enum: ['1', '2', '3', '4', '5']
+        default: '',
     },
     userAge: {
         type: String,
-        default: 'N/A',
-    },
-    userAgeRisk: {
-        type: String,
-        default: '5',
-        enum: ['1', '2', '3', '4', '5']
-    },
-    userTypeRisk: {
-        type: String,
-        default: '5',
-        enum: ['1', '2', '3', '4', '5']
-    },
-    concatenacionIban: {
-        type: [String],
-        default: [],
-    },
-    concatenacionBusinessNameIban: {
-        type: [String],
-        default: [],
+        default: '',
     },
     auxRiesgo: {
         type: String,
-        default: 'N/A',
+        default: '',
     },
     estado: {
         type: Boolean,
@@ -126,7 +86,7 @@ const ClientSchema = Schema({
     }
 }, { timestamps: true });
 
-
+ClientSchema.plugin(require('mongoose-autopopulate'));
 
 ClientSchema.methods.toJSON = function() {
     const { __v, _id, ...client  } = this.toObject();

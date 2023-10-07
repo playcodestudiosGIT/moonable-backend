@@ -33,18 +33,20 @@ router.put('/:id', [
 
 router.post('/', [
     validarJWT,
+    tieneRole('ADMIN_ROLE'),
+    check('ibanWallet', 'El Iban / Wallet es obligatorio').not().isEmpty(),
     validarCampos
 ], clientesPost);
 
 router.post('/bulk', [
-    // validarJWT,
+    validarJWT,
+    tieneRole('ADMIN_ROLE'),
     validarCampos
 ], bulkClientesPost);
 
 router.delete('/:id', [
     validarJWT,
-    // esAdminRole,
-
+    tieneRole('ADMIN_ROLE'),
     validarCampos
 ], clientesDelete);
 

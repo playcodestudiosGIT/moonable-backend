@@ -11,42 +11,44 @@ const {
 
 // const { esRoleValido, existeUsuarioPorId } = require('../helpers/db-validators');
 
-const { ordenesGet,
-    ordenesPut,
-    ordenesPost,
-    ordenesDelete,
-    ordenesPatch,
-    getOrdenPorId,
-    ordenesBulkPost } = require('../controllers/orders');
+const { operationsGet,
+    operationPut,
+    operationPost,
+    operationDelete,
+    operationPatch,
+    getOperationPorId,
+    operationsBulkPost } = require('../controllers/operations');
 
 const router = Router();
 
 
 router.get('/', [
     validarJWT,
-], ordenesGet);
+], operationsGet);
 
 router.put('/:id', [
     validarJWT,
+    tieneRole('ADMIN_ROLE'),
     validarCampos
-], ordenesPut);
+], operationPut);
 
 router.post('/', [
     validarJWT,
+    tieneRole('ADMIN_ROLE'),
     validarCampos
-], ordenesPost);
+], operationPost);
 
 router.post('/bulk', [
     validarJWT,
     validarCampos
-], ordenesBulkPost);
+], operationsBulkPost);
 
 router.delete('/:id', [
     validarJWT,
-    // esAdminRole,
+    tieneRole('ADMIN_ROLE'),
 
     validarCampos
-], ordenesDelete);
+], operationDelete);
 
 // TODO: Aquí
 router.get('/:id', [
@@ -54,11 +56,11 @@ router.get('/:id', [
     // esAdminRole,
 
     validarCampos
-], getOrdenPorId);
+], getOperationPorId);
 
 
 
-router.patch('/', ordenesPatch);
+router.patch('/', operationPatch);
 
 
 

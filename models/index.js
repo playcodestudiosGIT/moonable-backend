@@ -3,7 +3,7 @@
 const User = require('./user');
 const Role = require('./role');
 const Client = require('./client');
-const Order = require('./order');
+const Operation = require('./operation');
 
 
 
@@ -11,6 +11,6 @@ module.exports = {
     User,
     Role,
     Client,
-    Order
+    Operation
 }
 
