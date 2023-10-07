@@ -1,11 +1,8 @@
 {
   "name": "moonable_rest_server",
   "version": "1.0.0",
-  "description": "monnable app",
+  "description": "",
   "main": "index.js",
-  "engines": {
-    "node": "18.17.1"
-  },
   "scripts": {
     "start": "node app",
     "dev": "nodemon app.js"
@@ -23,7 +20,7 @@
     "express-validator": "^6.9.2",
     "google-auth-library": "^6.1.6",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^7.5.0",
+    "mongoose": "^7.6.0",
     "mongoose-autopopulate": "^1.0.1",
     "uuid": "^8.3.2"
   },
