@@ -23,7 +23,7 @@
     "express-validator": "^6.9.2",
     "google-auth-library": "^6.1.6",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^5.13.20",
+    "mongoose": "^7.5.0",
     "mongoose-autopopulate": "^1.0.1",
     "uuid": "^8.3.2"
   },
